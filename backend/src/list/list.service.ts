@@ -1,43 +1,44 @@
 import { Injectable } from '@nestjs/common';
+import { List } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient();
 
 @Injectable()
 export class ListService {
-  async create(createListDto: CreateListDto) {
-    const list = await prisma.list.create({
-      data: createListDto
+  constructor(private prisma: PrismaService) {}
+
+  async create(createListDto: CreateListDto): Promise<List> {
+    const list = await this.prisma.list.create({
+      data: createListDto,
     });
     return list;
   }
 
-  async findAll() {
-    return await prisma.list.findMany();
+  async findAll(): Promise<List[]> {
+    return await this.prisma.list.findMany();
   }
 
-  async findOne(id: number) {
-    return await prisma.list.findUnique({ where: { id } });
+  async findOne(id: number): Promise<List | null> {
+    return await this.prisma.list.findUnique({ where: { id } });
   }
 
-  async update(id: number, updateListDto: UpdateListDto) {
-    const list = await prisma.list.update({
+  async update(id: number, updateListDto: UpdateListDto): Promise<List> {
+    const list = await this.prisma.list.update({
       where: {
-        id
+        id,
       },
-      data: updateListDto
+      data: updateListDto,
     });
 
     return list;
   }
 
-  async remove(id: number) {
-    const list = await prisma.list.delete({
+  async remove(id: number): Promise<List> {
+    const list = await this.prisma.list.delete({
       where: {
-        id
-      }
+        id,
+      },
     });
 
     return list;

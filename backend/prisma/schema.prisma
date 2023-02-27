@@ -11,4 +11,41 @@ model List {
   id          Int     @id @default(autoincrement())
   description String
   name        String?
+  folder      Folder? @relation(fields: [folderId], references: [id])
+  folderId    Int?
+  type        Type?   @relation(fields: [typeId], references: [id])
+  typeId      Int?
+  items       Item[]
+}
+
+model Item {
+  id          Int      @id @default(autoincrement())
+  description String
+  name        String?
+  list        List     @relation(fields: [listId], references: [id])
+  listId      Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  quantity    Float
+}
+
+model Folder {
+  id          Int     @id @default(autoincrement())
+  description String
+  name        String?
+  lists       List[]
+}
+
+model Type {
+  id          Int     @id @default(autoincrement())
+  description String
+  name        String?
+  lists       List[]
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  description String
+  name        String?
+  items       Item[]
 }
