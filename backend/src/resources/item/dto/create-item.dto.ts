@@ -1,4 +1,5 @@
-import { IsNotEmpty, isNumber } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
+import { CheckListExists } from 'src/core/validations/check-list-exists.validation';
 
 export class CreateItemDto {
   @IsNotEmpty()
@@ -7,7 +8,7 @@ export class CreateItemDto {
   @IsNotEmpty()
   description: string;
 
-  // @Validate(CheckFolderExists)
+  @CheckListExists()
   @IsNotEmpty()
   listId: number;
 

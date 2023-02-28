@@ -15,7 +15,7 @@ export class ItemService {
   }
 
   async findAll(): Promise<Item[]> {
-    return await this.prisma.item.findMany();
+    return await this.prisma.item.findMany({ include: { list: true } });
   }
 
   async findOne(id: number): Promise<Item | null> {

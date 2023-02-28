@@ -9,7 +9,7 @@ import { PrismaService } from '../prisma.service';
 
 @Injectable()
 @ValidatorConstraint({ async: true })
-export class CheckFolderExistConstraint
+export class CheckCategoryExistConstraint
   implements ValidatorConstraintInterface
 {
   constructor(private prismaService: PrismaService) {}
@@ -17,26 +17,26 @@ export class CheckFolderExistConstraint
   async validate(id: number) {
     if (!id) return true;
     return Boolean(
-      await this.prismaService.folder.findFirst({
+      await this.prismaService.category.findFirst({
         where: { id },
       }),
     );
   }
 
   defaultMessage() {
-    return 'Folder not found.';
+    return 'Category not found.';
   }
 }
 
-export function CheckFolderExists(validationOptions?: ValidationOptions) {
+export function CheckCategoryExists(validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {
     registerDecorator({
-      name: 'checkFolderExists',
+      name: 'checkCategoryExists',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: CheckFolderExistConstraint,
+      validator: CheckCategoryExistConstraint,
     });
   };
 }

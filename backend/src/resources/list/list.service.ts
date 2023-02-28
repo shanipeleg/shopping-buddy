@@ -20,7 +20,10 @@ export class ListService {
   }
 
   async findOne(id: number): Promise<List | null> {
-    return await this.prisma.list.findUnique({ where: { id } });
+    return await this.prisma.list.findUnique({
+      where: { id },
+      include: { items: true },
+    });
   }
 
   async update(id: number, updateListDto: UpdateListDto): Promise<List> {
