@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, Validate } from 'class-validator';
 // import { CheckFolderExists } from 'src/validations/check-folder-exists.validation';
 export class CreateListDto {
   @IsNotEmpty()
@@ -7,6 +7,7 @@ export class CreateListDto {
   @IsNotEmpty()
   description: string;
 
+  // @Validate(CheckFolderExists)
   folderId: number;
 
   typeId: number;

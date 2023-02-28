@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CategoryModule } from './category/category.module';
-import { FolderModule } from './folder/folder.module';
-import { ItemModule } from './item/item.module';
-import { ListModule } from './list/list.module';
-import { TypeModule } from './type/type.module';
-import { ValidationsModule } from './validations/validations.module';
+import { ValidationsModule } from './core/validations/validations.module';
+import { CategoryModule } from './resources/category/category.module';
+import { FolderModule } from './resources/folder/folder.module';
+import { ItemModule } from './resources/item/item.module';
+import { ListModule } from './resources/list/list.module';
+import { TypeModule } from './resources/type/type.module';
 
 @Module({
   imports: [
