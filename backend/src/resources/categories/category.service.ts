@@ -1,11 +1,12 @@
 import {
+  Category,
   createCategory,
   getCategories,
   getOneCategory,
   removeCategory,
   updateCategory,
 } from "../../database/sequelize/resources/Category";
-import Category from "./category.model";
+
 import CreateCategoryDTO from "./dtos/create-category.dto";
 import UpdateCategoryDTO from "./dtos/update-category.dto";
 

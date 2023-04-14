@@ -3,47 +3,61 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Model,
+  Sequelize,
 } from "sequelize";
-import { connection } from "../connection";
+
 import CreateItemDTO from "../../../resources/items/dtos/create-item.dto";
 import UpdateItemDTO from "../../../resources/items/dtos/update-item.dto";
-import { List } from "./List";
+import { Category } from "./Category";
 
-class Item extends Model<InferAttributes<Item>, InferCreationAttributes<Item>> {
+export class Item extends Model<
+  InferAttributes<Item>,
+  InferCreationAttributes<Item>
+> {
   declare title: string;
   declare description: string;
-  declare listId: number;
-}
+  declare categoryId?: number;
 
-Item.init(
-  {
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    listId: {
-      type: DataTypes.INTEGER,
-
-      references: {
-        model: List,
-
-        key: "id",
+  public static initialize(connection: Sequelize) {
+    this.init(
+      {
+        title: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        description: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        categoryId: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: Category,
+            key: "id",
+          },
+        },
       },
-    },
-  },
-  { sequelize: connection }
-);
+      { sequelize: connection }
+    );
+  }
+}
 
 export async function createItem(formBody: CreateItemDTO): Promise<Item> {
   return await Item.create(formBody);
 }
 
-export async function getCategories(): Promise<Item[]> {
+export async function getItems(): Promise<Item[]> {
   return await Item.findAll();
+}
+
+export async function findOrCreateItemByTitle(
+  formBody: CreateItemDTO
+): Promise<Item> {
+  const [result, _] = await Item.findOrCreate({
+    where: { title: formBody.title },
+    defaults: formBody,
+  });
+  return result;
 }
 
 export async function getOneItem(id: number): Promise<Item | null> {
@@ -70,6 +84,6 @@ export async function removeItem(id: number) {
   return item;
 }
 
-export async function getAlItemslByList(listId: number) {
-  return await Item.findAll({ where: { listId } });
+export async function getAlItemslByCategory(categoryId: number) {
+  return await Item.findAll({ where: { categoryId } });
 }

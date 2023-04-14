@@ -1,30 +1,36 @@
 "use strict";
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Items", {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable("item_lists", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      title: {
-        type: Sequelize.STRING,
-      },
-      description: {
-        type: Sequelize.STRING,
-      },
-      categoryId: {
+      listId: {
         type: Sequelize.DataTypes.INTEGER,
         references: {
           model: {
-            tableName: "categories",
+            tableName: "lists",
           },
           key: "id",
         },
-        allowNull: true,
+        allowNull: false,
       },
+      itemId: {
+        type: Sequelize.DataTypes.INTEGER,
+        references: {
+          model: {
+            tableName: "items",
+          },
+          key: "id",
+        },
+        allowNull: false,
+      },
+      quantity: { type: Sequelize.DataTypes.INTEGER, defaultValue: 1 },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -35,7 +41,7 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Items");
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.dropTable("item_lists");
   },
 };

@@ -1,4 +1,4 @@
-export default interface CreateItemDTO {
+export default interface addItemToListDTO {
   title: string;
   description: string;
   categoryId?: number;
