@@ -8,7 +8,7 @@ function errorHandler(
   _next: NextFunction
 ) {
   const { status, message } = err;
-  res.status(status).send(message);
+  res.status(status ?? 500).send(message);
 }
 
 export default errorHandler;

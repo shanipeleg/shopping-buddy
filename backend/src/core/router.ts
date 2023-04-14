@@ -7,9 +7,9 @@ import errorHandler from "../middlewares/errorHandler";
 
 const router = Router();
 
+router.use("/items/list", itemListRouter);
 router.use("/lists", listRouter);
 router.use("/items", itemRouter);
-router.use("/items/list", itemListRouter);
 router.use("/categories", categoryRouter);
 
 router.use(errorHandler);

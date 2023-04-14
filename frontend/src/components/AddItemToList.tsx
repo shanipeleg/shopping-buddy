@@ -14,7 +14,7 @@ interface DropdownOptions {
 }
 
 const AddItemToList = ({ listId }: AddItemToListInterface) => {
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItem] = useState("");
   const [typedValue, setTypedValue] = useState("");
   const dispatch = useDispatch();
   const items = useSelector((state: RootState) => getItems(state));
@@ -32,18 +32,15 @@ const AddItemToList = ({ listId }: AddItemToListInterface) => {
 
   useEffect(() => {
     dispatch(fetchItems());
-  }, []);
+  }, [dispatch]);
 
   const getOptions = () => {
     const realOptions = [...items].map((item) => {
       return item.title;
     });
-    if (
-      typedValue &&
-      !realOptions.map((option) =>
-        option.toLowerCase().includes(typedValue.toLowerCase())
-      )
-    ) {
+
+    const optionsLowercase = realOptions.map((option) => option.toLowerCase());
+    if (typedValue && !optionsLowercase.includes(typedValue.toLowerCase())) {
       realOptions.unshift(typedValue);
     }
 

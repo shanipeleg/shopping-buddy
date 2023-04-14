@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { Item } from "../models/Item";
-import { List, ListToCreate } from "../models/List";
+import { HTTP_METHODS } from "../utils/consts";
 import { apiCallBegan } from "./api";
 import { RootState } from "./configureStore";
 
@@ -93,7 +93,7 @@ const url = "items";
 export const fetchItems = () =>
   apiCallBegan({
     url,
-    method: "get",
+    method: HTTP_METHODS.GET,
     onSuccess: itemsFetched.type,
     onBegin: itemFetchingRequested.type,
     onFailed: itemFetchingFailed.type,

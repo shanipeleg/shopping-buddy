@@ -5,7 +5,7 @@ export interface List {
   description: string;
   id: number;
   localId?: number;
-  Items?: Item[];
+  Items?: Required<Item>[];
 }
 
 export type ListToCreate = Omit<List, "id">;

@@ -44,7 +44,14 @@ export async function getCategories(): Promise<List[]> {
 }
 
 export async function getOneList(id: number): Promise<List | null> {
-  return await List.findByPk(id, { include: Item });
+  return await List.findByPk(id, {
+    include: {
+      model: Item,
+      through: {
+        attributes: ["id", "quantity"],
+      },
+    },
+  });
 }
 
 export async function reloadList(list: List): Promise<List> {

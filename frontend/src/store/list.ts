@@ -1,8 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
+import { omit } from "lodash";
 import { List, ListToCreate } from "../models/List";
+import { HTTP_METHODS } from "../utils/consts";
 import { apiCallBegan } from "./api";
 import { RootState } from "./configureStore";
+import { listItemsFetched } from "./itemList";
 
 interface ListState {
   data: List[];
@@ -57,7 +60,8 @@ const slice = createSlice({
       state.loadingFetching = false;
     },
     listFetched: (state: ListState, action: PayloadAction<List>) => {
-      state.dataById[action.payload.id] = action.payload;
+      const list = omit(action.payload, "Items");
+      state.dataById[action.payload.id] = list;
       state.loadingFetching = false;
     },
   },
@@ -109,7 +113,7 @@ const url = "lists";
 export const fetchLists = () =>
   apiCallBegan({
     url,
-    method: "get",
+    method: HTTP_METHODS.GET,
     onSuccess: listsFetched.type,
     onBegin: listFetchingRequested.type,
     onFailed: listFetchingFailed.type,
@@ -118,8 +122,8 @@ export const fetchLists = () =>
 export const fetchList = (id: number) =>
   apiCallBegan({
     url: `${url}/${id}`,
-    method: "get",
-    onSuccess: listFetched.type,
+    method: HTTP_METHODS.GET,
+    onSuccess: [listFetched.type, listItemsFetched.type],
     onFailed: listFetchingFailed.type,
     onBegin: listFetchingRequested.type,
   });
@@ -128,7 +132,7 @@ export const addList = (data: ListToCreate) =>
   apiCallBegan({
     url,
     data,
-    method: "post",
+    method: HTTP_METHODS.POST,
     onSuccess: listCreated.type,
     onBegin: listCreationRequested.type,
     onFailed: listCreationFailed.type,

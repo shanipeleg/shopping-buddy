@@ -1,7 +1,8 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { FindByID } from "../../utils/types";
 import addItemToListDTO from "./dtos/add-item-to-list.dto";
-import { addItemToList } from "./item_lists.service";
+import updateQuantityDTO from "./dtos/update-quantity.dto";
+import { addItemToList, updateItemListQuantity } from "./item_lists.service";
 
 const router = Router();
 router.post(
@@ -14,6 +15,20 @@ router.post(
       res.json(item);
     } catch (e) {
       res.status(500).send("Error!");
+    }
+  }
+);
+
+router.put(
+  "/:id",
+  async (req: Request<FindByID>, res: Response, next: NextFunction) => {
+    try {
+      const formBody = req.body as updateQuantityDTO;
+      const { id } = req.params;
+      const result = await updateItemListQuantity(id, formBody);
+      res.json(result);
+    } catch (error) {
+      next(error);
     }
   }
 );

@@ -1,10 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Item } from "../models/Item";
+import { ItemList } from "../models/ItemList";
+import { List } from "../models/List";
+import { HTTP_METHODS } from "../utils/consts";
 import { apiCallBegan } from "./api";
 import { RootState } from "./configureStore";
 
 interface ItemListsState {
-  dataById: { [key: number]: Item };
+  dataById: { [key: number]: Required<Item>[] };
   loadingAddingToList: boolean;
   errorAddingToList: null | string;
 }
@@ -16,7 +19,7 @@ const initialState: ItemListsState = {
 };
 
 const slice = createSlice({
-  name: "items",
+  name: "itemsLists",
   initialState,
   reducers: {
     itemAddToListRequested: (state: ItemListsState) => {
@@ -25,19 +28,51 @@ const slice = createSlice({
     itemAddToListFailed: (state: ItemListsState) => {
       state.loadingAddingToList = false;
     },
-    itemAddedToList: (state: ItemListsState, action: PayloadAction<Item>) => {
+    itemAddedToList: (state: ItemListsState, action: PayloadAction<List>) => {
       state.loadingAddingToList = false;
+      const { id, Items } = action.payload;
+      if (Items) state.dataById[id] = Items;
+    },
+    listItemsFetched: (state: ItemListsState, action: PayloadAction<List>) => {
+      state.loadingAddingToList = false;
+      const { id, Items } = action.payload;
+      if (Items) state.dataById[id] = Items;
+    },
+    listItemQuantityUpdated: (
+      state: ItemListsState,
+      action: PayloadAction<ItemList>
+    ) => {
+      const { id, listId, quantity } = action.payload;
+      const listItems = state.dataById[listId];
+      const index = listItems.findIndex(
+        (listItem) => listItem.ItemList.id === id
+      );
+      if (index !== -1) {
+        if (quantity === 0) {
+          state.dataById[listId] = listItems.filter(
+            (listItem) => listItem.ItemList.id !== id
+          );
+        } else {
+          listItems[index].ItemList.quantity = quantity;
+        }
+      }
     },
   },
 });
 
 export default slice.reducer;
-const { itemAddToListRequested, itemAddToListFailed, itemAddedToList } =
-  slice.actions;
+const {
+  itemAddToListRequested,
+  itemAddToListFailed,
+  itemAddedToList,
+  listItemQuantityUpdated,
+} = slice.actions;
+
+export const { listItemsFetched } = slice.actions;
 
 //Selectors
-export function getItems(state: RootState) {
-  return state.items.data;
+export function getListItems(state: RootState, listId: number) {
+  return state.itemsLists.dataById[listId];
 }
 
 const url = "items/list";
@@ -47,8 +82,19 @@ export const addItemToList = (itemTitle: string, listId: number) =>
   apiCallBegan({
     url: `${url}/${listId}`,
     data: { title: itemTitle, description: "" }, //TODO deal with description
-    method: "post",
+    method: HTTP_METHODS.POST,
     onSuccess: itemAddedToList.type,
     onBegin: itemAddToListRequested.type,
     onFailed: itemAddToListFailed.type,
+  });
+
+export const updateQuantityOfListItem = (
+  itemListId: number,
+  quantity: number
+) =>
+  apiCallBegan({
+    url: `${url}/${itemListId}`,
+    data: { quantity },
+    method: HTTP_METHODS.PUT,
+    onSuccess: listItemQuantityUpdated.type,
   });

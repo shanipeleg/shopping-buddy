@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { ItemList } from "../models/ItemList";
 import { RootState } from "../store/configureStore";
+import { getListItems, updateQuantityOfListItem } from "../store/itemList";
 import {
   fetchList,
   getErrorFetching,
@@ -25,6 +27,18 @@ const ListPage = () => {
     getListById(state, Number(id))
   );
 
+  const listItems = useSelector((state: RootState) =>
+    getListItems(state, Number(id))
+  );
+
+  const handleDecrement = (itemList: ItemList, currentQuantity: number) => {
+    dispatch(updateQuantityOfListItem(itemList.id, --currentQuantity));
+  };
+
+  const handleIncrease = (itemList: ItemList, currentQuantity: number) => {
+    dispatch(updateQuantityOfListItem(itemList.id, ++currentQuantity));
+  };
+
   useEffect(() => {
     if (id && isStringNumeric(id)) {
       dispatch(fetchList(Number(id)));
@@ -44,8 +58,8 @@ const ListPage = () => {
           <h5>{list.description}</h5>
           <AddItemToList listId={list.id} />
           <ol className="list-group list-group-numbered">
-            {list.Items &&
-              list.Items.map((item) => (
+            {listItems &&
+              listItems.map((item) => (
                 <li
                   key={item.id}
                   className="list-group-item d-flex justify-content-between align-items-start"
@@ -57,13 +71,31 @@ const ListPage = () => {
                   {item.ItemList && (
                     <>
                       <div className="btn-group" role="group">
-                        <button type="button" className="btn btn-primary">
+                        <button
+                          onClick={() =>
+                            handleDecrement(
+                              item.ItemList,
+                              item.ItemList.quantity
+                            )
+                          }
+                          type="button"
+                          className="btn btn-primary"
+                        >
                           -
                         </button>
                         <div className="btn btn-info disabled">
                           {item.ItemList.quantity}
                         </div>
-                        <button type="button" className="btn btn-primary">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={() =>
+                            handleIncrease(
+                              item.ItemList,
+                              item.ItemList.quantity
+                            )
+                          }
+                        >
                           +
                         </button>
                       </div>

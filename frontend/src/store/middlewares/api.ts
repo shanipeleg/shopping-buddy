@@ -26,10 +26,17 @@ export const api: Middleware<{}, RootState> =
       });
 
       if (onSuccess) {
-        const payload = data.localId
-          ? { ...response.data, localId: data.localId }
-          : response.data;
-        storeApi.dispatch({ type: onSuccess, payload });
+        if (typeof onSuccess === "string") {
+          const payload = data.localId
+            ? { ...response.data, localId: data.localId }
+            : response.data;
+          storeApi.dispatch({ type: onSuccess, payload });
+        }
+        if (Array.isArray(onSuccess)) {
+          onSuccess.forEach((successAction) => {
+            storeApi.dispatch({ type: successAction, payload: response.data });
+          });
+        }
       }
     } catch (error) {
       if (onFailed) {

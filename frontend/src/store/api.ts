@@ -1,10 +1,11 @@
 import { createAction } from "@reduxjs/toolkit";
+import { HTTP_METHODS } from "../utils/consts";
 
 type apiPayload = {
   url: string;
-  method: string;
+  method: HTTP_METHODS;
   data?: any;
-  onSuccess?: string;
+  onSuccess?: string | string[];
   onBegin?: string;
   onFailed?: string;
 };
