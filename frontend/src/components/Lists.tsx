@@ -1,5 +1,4 @@
 import { List as ListInterface } from "../models/List";
-import { chunk } from "lodash";
 import List from "./List";
 import { connect } from "react-redux";
 import { fetchLists, getLists } from "../store/list";
@@ -18,14 +17,10 @@ const Lists = ({ loadLists, lists }: ListProps) => {
 
   return (
     <>
-      <div className="container text-center">
-        {chunk(lists, 3).map((chunk, index) => (
-          <div key={index} className="row mb-2">
-            {chunk.map(({ title, description, id }) => (
-              <div key={id} className="col">
-                <List {...{ title, description, id }} />
-              </div>
-            ))}
+      <div className="container mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {lists.map(({ title, description, id }) => (
+          <div key={id}>
+            <List {...{ title, description, id }} />
           </div>
         ))}
       </div>

@@ -2,9 +2,14 @@ import Joi from "joi";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ListToCreate } from "../models/List";
-import { RootState } from "../store/configureStore";
-import { addList, getCreationLoading, getListByLocalId } from "../store/list";
+import { ListToCreate } from "../../models/List";
+import { RootState } from "../../store/configureStore";
+import {
+  addList,
+  getCreationLoading,
+  getListByLocalId,
+} from "../../store/list";
+import FormInput from "./FormInput";
 
 const CreateListForm = () => {
   const dispatch = useDispatch();
@@ -71,38 +76,31 @@ const CreateListForm = () => {
 
   return (
     <>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <div className="mb-3">
-          <label className="form-label">Title</label>
-          <input
-            type="text"
-            name="title"
-            onChange={(e) => handleValue(e)}
-            className="form-control"
-            aria-describedby="title"
-          ></input>
-          <div className="form-text">{errors.title}</div>
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Description</label>
-          <input
-            type="text"
-            name="description"
-            onChange={(e) => handleValue(e)}
-            className="form-control"
-            aria-describedby="description"
-          ></input>
-          <div className="form-text">{errors.description}</div>
-        </div>
-
-        <button
-          type="submit"
-          disabled={isLoading || !isFormValid()}
-          className="btn btn-primary"
-        >
-          Submit
-        </button>
-      </form>
+      <div className="w-full">
+        <form onSubmit={(e) => handleSubmit(e)} className="px-8 pt-6 pb-8 mb-4">
+          <FormInput
+            title="Title"
+            elementName="title"
+            onChange={handleValue}
+            warning={errors.title}
+          />
+          <FormInput
+            title="Description"
+            onChange={handleValue}
+            elementName="description"
+            warning={errors.description}
+          />
+          <div className="flex items-center justify-between">
+            <button
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-500 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none"
+              type="submit"
+              disabled={isLoading || !isFormValid()}
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 };

@@ -54,23 +54,28 @@ const ListPage = () => {
       {(errorParam || fetchError) && <div>Error!</div>}
       {list && (
         <>
-          <h1>{list.title}</h1>
-          <h5>{list.description}</h5>
+          <div className="mb-2 tracking-wide text-sm text-indigo-500 font-semibold">
+            {list.title}
+          </div>
+          <div className="mb-2 block mt-1 text-lg leading-tight font-medium text-gray-100">
+            {list.description}
+          </div>
           <AddItemToList listId={list.id} />
-          <ol className="list-group list-group-numbered">
+          <div className="grid grid-cols-1 gap-4 mt-3">
             {listItems &&
               listItems.map((item) => (
-                <li
-                  key={item.id}
-                  className="list-group-item d-flex justify-content-between align-items-start"
-                >
-                  <div className="ms-2 me-auto">
-                    <div className="fw-bold">{item.title}</div>
-                    {item.description}
-                  </div>
-                  {item.ItemList && (
-                    <>
-                      <div className="btn-group" role="group">
+                <div key={item.id} className="">
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <div className="flex justify-between items-center">
+                      <div className="flex-grow">
+                        <p className="text-indigo-400 text-lg mb-2">
+                          {item.title}
+                        </p>
+                        <p className="text-gray-200 text-sm">
+                          {item.description}
+                        </p>
+                      </div>
+                      <div className="flex-shrink-0">
                         <button
                           onClick={() =>
                             handleDecrement(
@@ -78,32 +83,30 @@ const ListPage = () => {
                               item.ItemList.quantity
                             )
                           }
-                          type="button"
-                          className="btn btn-primary"
+                          className="small-button hover:animate-pulse rounded-full bg-purple-500 text-white px-3 py-1 hover:bg-purple-600 transition duration-300 ease-in-out mr-1"
                         >
                           -
                         </button>
-                        <div className="btn btn-info disabled">
+                        <div className="inline-block w-8 text-white text-lg font-semibold text-center hover:text-gray-300 transition duration-300 ease-in-out mr-1">
                           {item.ItemList.quantity}
                         </div>
                         <button
-                          type="button"
-                          className="btn btn-primary"
                           onClick={() =>
                             handleIncrease(
                               item.ItemList,
                               item.ItemList.quantity
                             )
                           }
+                          className="small-button hover:animate-pulse rounded-full bg-purple-500 text-white px-3 py-1 hover:bg-purple-600 transition duration-300 ease-in-out ml-1"
                         >
                           +
                         </button>
                       </div>
-                    </>
-                  )}
-                </li>
+                    </div>
+                  </div>
+                </div>
               ))}
-          </ol>
+          </div>
         </>
       )}
     </>
