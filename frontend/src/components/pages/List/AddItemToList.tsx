@@ -1,9 +1,9 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/configureStore";
-import { fetchItems, getItems } from "../store/item";
-import { addItemToList } from "../store/itemList";
+import { RootState } from "../../../store/configureStore";
+import { fetchItems, getItems } from "../../../store/item";
+import { addItemToList } from "../../../store/itemList";
 
 interface AddItemToListInterface {
   listId: number;

@@ -6,7 +6,9 @@
   "scripts": {
     "start": "nodemon index.ts",
     "migrate": "cd ./src/database/sequelize && sequelize-cli db:migrate",
-    "generate": "cd ./src/database/sequelize &&sequelize-cli migration:generate --name"
+    "generate": "cd ./src/database/sequelize &&sequelize-cli migration:generate --name",
+    "seed": "cd ./src/database/sequelize &&sequelize-cli seed:generate --name",
+    "seed:run": "cd ./src/database/sequelize &&sequelize-cli db:seed:all"
   },
   "author": "",
   "license": "ISC",

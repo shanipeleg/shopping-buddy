@@ -51,12 +51,20 @@ const slice = createSlice({
       state.dataById[action.payload.id] = action.payload;
       state.loadingFetching = false;
     },
+    itemUpdated: (state: ItemState, action: PayloadAction<Item>) => {
+      state.dataById[action.payload.id] = action.payload;
+    },
   },
 });
 
 export default slice.reducer;
-const { itemsFetched, itemFetchingFailed, itemFetchingRequested } =
-  slice.actions;
+const {
+  itemsFetched,
+  itemFetchingFailed,
+  itemFetchingRequested,
+  itemFetched,
+  itemUpdated,
+} = slice.actions;
 
 //Selectors
 export function getItems(state: RootState) {
@@ -97,4 +105,21 @@ export const fetchItems = () =>
     onSuccess: itemsFetched.type,
     onBegin: itemFetchingRequested.type,
     onFailed: itemFetchingFailed.type,
+  });
+
+export const fetchItem = (id: number) =>
+  apiCallBegan({
+    url: `${url}/${id}`,
+    method: HTTP_METHODS.GET,
+    onSuccess: itemFetched.type,
+    onBegin: itemFetchingRequested.type,
+    onFailed: itemFetchingFailed.type,
+  });
+
+export const updateItem = (id: number, data: Item) =>
+  apiCallBegan({
+    url: `${url}/${id}`,
+    method: HTTP_METHODS.PUT,
+    data,
+    onSuccess: itemUpdated.type,
   });

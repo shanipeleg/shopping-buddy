@@ -8,7 +8,7 @@ interface ListInterface {
 
 const List = ({ title, description, id }: ListInterface) => {
   return (
-    <div className="max-w-sm p-6 rounded-lg shadow bg-gray-700">
+    <div className="max-w-sm p-6 shadow appearance-none bg-transparent border-indigo-500 border rounded w-full text-gray-100 leading-tight focus:outline-none focus:shadow-outline">
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         {title}
       </h5>

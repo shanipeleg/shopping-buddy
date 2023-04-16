@@ -15,6 +15,7 @@ export class Category extends Model<
 > {
   declare title: string;
   declare description: string;
+  declare icon?: string;
 
   public static initialize(connection: Sequelize) {
     this.init(
@@ -25,6 +26,10 @@ export class Category extends Model<
         },
         description: {
           type: DataTypes.STRING,
+          allowNull: false,
+        },
+        icon: {
+          type: DataTypes.STRING(20),
           allowNull: false,
         },
       },

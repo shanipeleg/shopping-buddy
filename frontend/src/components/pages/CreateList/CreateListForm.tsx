@@ -2,14 +2,14 @@ import Joi from "joi";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ListToCreate } from "../../models/List";
-import { RootState } from "../../store/configureStore";
+import { ListToCreate } from "../../../models/List";
+import { RootState } from "../../../store/configureStore";
 import {
   addList,
   getCreationLoading,
   getListByLocalId,
-} from "../../store/list";
-import FormInput from "./FormInput";
+} from "../../../store/list";
+import FormInput from "../../common/FormInput";
 
 const CreateListForm = () => {
   const dispatch = useDispatch();
@@ -90,7 +90,7 @@ const CreateListForm = () => {
             elementName="description"
             warning={errors.description}
           />
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-end">
             <button
               className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-purple-500 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none"
               type="submit"

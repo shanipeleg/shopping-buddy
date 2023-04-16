@@ -1,16 +1,27 @@
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import CreateListForm from "./components/CreateListPage/CreateListForm";
-import ListPage from "./components/ListPage";
-import Lists from "./components/Lists";
+import CreateListForm from "./components/pages/CreateList/CreateListForm";
+import ListPage from "./components/pages/List/ListPage";
+import Lists from "./components/pages/Lists/Lists";
 import NavBar from "./components/NavBar";
 import { store } from "./store/configureStore";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import {
+  ThemeProvider,
+  createTheme,
+  SimplePaletteColorOptions,
+} from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import ItemPage from "./components/pages/Item/Item";
+
+const colorPalette: SimplePaletteColorOptions = {
+  main: "#6366F1",
+  contrastText: "#6366F1",
+};
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
+    primary: colorPalette,
   },
 });
 function App() {
@@ -20,6 +31,7 @@ function App() {
     { path: "/create-list", element: <CreateListForm /> },
     { path: "/lists", element: <Lists /> },
     { path: "/list/:id", element: <ListPage /> },
+    { path: "/item/:id", element: <ItemPage /> },
   ];
 
   return (

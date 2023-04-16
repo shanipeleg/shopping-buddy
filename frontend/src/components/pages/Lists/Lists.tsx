@@ -1,8 +1,8 @@
-import { List as ListInterface } from "../models/List";
+import { List as ListInterface } from "../../../models/List";
 import List from "./List";
 import { connect } from "react-redux";
-import { fetchLists, getLists } from "../store/list";
-import { AppDispatch, RootState } from "../store/configureStore";
+import { fetchLists, getLists } from "../../../store/list";
+import { AppDispatch, RootState } from "../../../store/configureStore";
 import { useEffect } from "react";
 
 interface ListProps {
