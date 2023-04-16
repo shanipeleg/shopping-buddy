@@ -8,6 +8,7 @@ import {
 } from "sequelize";
 import CreateListDTO from "../../../resources/lists/dtos/create-list.dto";
 import UpdateListDTO from "../../../resources/lists/dtos/update-list.dto";
+import { Category } from "./Category";
 import { Item } from "./Item";
 
 export class List extends Model<
@@ -45,12 +46,20 @@ export async function getCategories(): Promise<List[]> {
 
 export async function getOneList(id: number): Promise<List | null> {
   return await List.findByPk(id, {
-    include: {
-      model: Item,
-      through: {
-        attributes: ["id", "quantity"],
+    include: [
+      {
+        model: Item,
+        through: {
+          attributes: ["id", "quantity"],
+        },
+        include: [
+          {
+            model: Category,
+            attributes: ["id", "title", "icon"],
+          },
+        ],
       },
-    },
+    ],
   });
 }
 

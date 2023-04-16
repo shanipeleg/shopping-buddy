@@ -5,6 +5,7 @@ import { ItemList } from "../../../models/ItemList";
 import { RootState } from "../../../store/configureStore";
 import {
   getListItems,
+  getListItemsKeyedByCategory,
   updateQuantityOfListItem,
 } from "../../../store/itemList";
 import {
@@ -16,6 +17,7 @@ import {
 import { isStringNumeric } from "../../../utils/isStringNumeric";
 import AddItemToList from "./AddItemToList";
 import Spinner from "../../common/Spinner";
+import ItemRow from "./ItemRow";
 
 const ListPage = () => {
   const { id } = useParams();
@@ -31,8 +33,8 @@ const ListPage = () => {
     getListById(state, Number(id))
   );
 
-  const listItems = useSelector((state: RootState) =>
-    getListItems(state, Number(id))
+  const listItemsByCategory = useSelector((state: RootState) =>
+    getListItemsKeyedByCategory(state, Number(id))
   );
 
   const handleDecrement = (itemList: ItemList, currentQuantity: number) => {
@@ -65,56 +67,31 @@ const ListPage = () => {
             {list.description}
           </div>
           <AddItemToList listId={list.id} />
-
           <div className="grid grid-cols-1 gap-4 mt-3">
-            {listItems &&
-              listItems.map((item) => (
-                <div key={item.id} className="">
-                  <div className="p-6 shadow appearance-none bg-transparent border-indigo-500 border rounded w-full text-gray-100 leading-tight focus:outline-none focus:shadow-outline">
-                    <div className="flex justify-between items-center">
-                      <div className="flex-grow">
-                        <p className="text-indigo-400 text-lg mb-2">
-                          {item.title}
-                          <NavLink
-                            to={`/item/${item.id}`}
-                            className="ml-2 hover:animate-pulse rounded-full bg-purple-500 text-white px-3 py-1 hover:bg-purple-600 transition duration-300 ease-in-out mr-1"
-                          >
-                            <i className="fa-solid fa-pen-to-square"></i>
-                          </NavLink>
-                        </p>
-                        <p className="text-gray-200 text-sm">
-                          {item.description}
-                        </p>
-                      </div>
-                      <div className="flex-shrink-0">
-                        <button
-                          onClick={() =>
-                            handleDecrement(
-                              item.ItemList,
-                              item.ItemList.quantity
-                            )
-                          }
-                          className="small-button hover:animate-pulse rounded-full bg-purple-500 text-white px-3 py-1 hover:bg-purple-600 transition duration-300 ease-in-out mr-1"
-                        >
-                          -
-                        </button>
-                        <div className="inline-block w-8 text-white text-lg font-semibold text-center hover:text-gray-300 transition duration-300 ease-in-out mr-1">
-                          {item.ItemList.quantity}
-                        </div>
-                        <button
-                          onClick={() =>
-                            handleIncrease(
-                              item.ItemList,
-                              item.ItemList.quantity
-                            )
-                          }
-                          className="small-button hover:animate-pulse rounded-full bg-purple-500 text-white px-3 py-1 hover:bg-purple-600 transition duration-300 ease-in-out ml-1"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+            {listItemsByCategory &&
+              listItemsByCategory.map((categoryWithItems) => (
+                <div
+                  key={categoryWithItems.id}
+                  className="grid grid-cols-1 gap-4 mt-3"
+                >
+                  <label>
+                    {categoryWithItems.title}
+                    {categoryWithItems.icon && (
+                      <i
+                        className={`mx-2 fa-solid ${categoryWithItems.icon}`}
+                      ></i>
+                    )}
+                  </label>
+
+                  {categoryWithItems.items &&
+                    categoryWithItems.items.map((item) => (
+                      <ItemRow
+                        key={item.id}
+                        item={item}
+                        handleDecrement={handleDecrement}
+                        handleIncrease={handleIncrease}
+                      />
+                    ))}
                 </div>
               ))}
           </div>

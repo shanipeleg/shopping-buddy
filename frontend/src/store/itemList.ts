@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Category } from "../models/Category";
 import { Item } from "../models/Item";
 import { ItemList } from "../models/ItemList";
 import { List } from "../models/List";
@@ -73,6 +74,21 @@ export const { listItemsFetched } = slice.actions;
 //Selectors
 export function getListItems(state: RootState, listId: number) {
   return state.itemsLists.dataById[listId];
+}
+
+export function getListItemsKeyedByCategory(state: RootState, itemId: number) {
+  const items = state.itemsLists.dataById[itemId];
+  const categories: { [key: string]: Category & { items: Item[] } } = {};
+  if (items) {
+    items.forEach((item) => {
+      let category = item.Category ?? { id: 0, title: "No Category" };
+      let items = categories[category.id]?.items
+        ? [...categories[category.id].items, item]
+        : [item];
+      categories[category.id] = { ...category, items };
+    });
+  }
+  return Object.values(categories);
 }
 
 const url = "items/list";
