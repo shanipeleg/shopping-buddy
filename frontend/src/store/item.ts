@@ -4,6 +4,7 @@ import { Item } from "../models/Item";
 import { HTTP_METHODS } from "../utils/consts";
 import { apiCallBegan } from "./api";
 import { RootState } from "./configureStore";
+import { updateItemCategoryInLists } from "./itemList";
 
 interface ItemState {
   data: Item[];
@@ -121,5 +122,5 @@ export const updateItem = (id: number, data: Item) =>
     url: `${url}/${id}`,
     method: HTTP_METHODS.PUT,
     data,
-    onSuccess: itemUpdated.type,
+    onSuccess: [itemUpdated.type, updateItemCategoryInLists.type],
   });

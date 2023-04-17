@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 import { Category } from "../models/Category";
 import { Item } from "../models/Item";
 import { ItemList } from "../models/ItemList";
@@ -39,6 +39,22 @@ const slice = createSlice({
       const { id, Items } = action.payload;
       if (Items) state.dataById[id] = Items;
     },
+    updateItemCategoryInLists: (
+      state: ItemListsState,
+      action: PayloadAction<Required<Item>>
+    ) => {
+      Object.keys(state.dataById).forEach((key: string) => {
+        let items = state.dataById[Number(key)];
+        const { id, categoryId, Category } = action.payload;
+        state.dataById[Number(key)] = items.map((item) => {
+          if (item.id === id) {
+            item.categoryId = categoryId;
+            item.Category = Category;
+          }
+          return item;
+        });
+      });
+    },
     listItemQuantityUpdated: (
       state: ItemListsState,
       action: PayloadAction<ItemList>
@@ -69,7 +85,7 @@ const {
   listItemQuantityUpdated,
 } = slice.actions;
 
-export const { listItemsFetched } = slice.actions;
+export const { listItemsFetched, updateItemCategoryInLists } = slice.actions;
 
 //Selectors
 export function getListItems(state: RootState, listId: number) {

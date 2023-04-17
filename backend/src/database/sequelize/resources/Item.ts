@@ -68,11 +68,12 @@ export async function updateItem(
   id: number,
   formBody: UpdateItemDTO
 ): Promise<Item | null> {
-  const item = await Item.findByPk(id);
+  const item = await Item.findByPk(id, { include: Category });
   if (!item) {
     throw new Error("Could not find item!");
   }
-  return await item.update(formBody);
+  await item.update(formBody);
+  return await item.reload();
 }
 
 export async function removeItem(id: number) {

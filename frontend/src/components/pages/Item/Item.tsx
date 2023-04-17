@@ -128,7 +128,7 @@ const ItemPage = () => {
             <FormSelectInput
               options={categories}
               label="Category"
-              selectedValue={item.categoryId}
+              selectedValue={item.categoryId ?? undefined}
               onChange={handleSelectCategory}
               elementName="category"
               optionKey="id"

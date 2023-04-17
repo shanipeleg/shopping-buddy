@@ -17,7 +17,9 @@ import {
 import { isStringNumeric } from "../../../utils/isStringNumeric";
 import AddItemToList from "./AddItemToList";
 import Spinner from "../../common/Spinner";
-import ItemRow from "./ItemRow";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import CategoryInList from "./CategoryInList";
 
 const ListPage = () => {
   const { id } = useParams();
@@ -56,47 +58,33 @@ const ListPage = () => {
 
   return (
     <>
-      {isLoading && <Spinner />}
-      {(errorParam || fetchError) && <div>Error!</div>}
-      {list && (
-        <>
-          <div className="mb-2 tracking-wide text-sm text-indigo-500 font-semibold">
-            {list.title}
-          </div>
-          <div className="mb-2 block mt-1 text-lg leading-tight font-medium text-gray-100">
-            {list.description}
-          </div>
-          <AddItemToList listId={list.id} />
-          <div className="grid grid-cols-1 gap-4 mt-3">
-            {listItemsByCategory &&
-              listItemsByCategory.map((categoryWithItems) => (
-                <div
-                  key={categoryWithItems.id}
-                  className="grid grid-cols-1 gap-4 mt-3"
-                >
-                  <label>
-                    {categoryWithItems.title}
-                    {categoryWithItems.icon && (
-                      <i
-                        className={`mx-2 fa-solid ${categoryWithItems.icon}`}
-                      ></i>
-                    )}
-                  </label>
+      <DndProvider backend={HTML5Backend}>
+        {isLoading && <Spinner />}
+        {(errorParam || fetchError) && <div>Error!</div>}
 
-                  {categoryWithItems.items &&
-                    categoryWithItems.items.map((item) => (
-                      <ItemRow
-                        key={item.id}
-                        item={item}
-                        handleDecrement={handleDecrement}
-                        handleIncrease={handleIncrease}
-                      />
-                    ))}
-                </div>
-              ))}
-          </div>
-        </>
-      )}
+        {list && (
+          <>
+            <div className="mb-2 tracking-wide text-sm text-indigo-500 font-semibold">
+              {list.title}
+            </div>
+            <div className="mb-2 block mt-1 text-lg leading-tight font-medium text-gray-100">
+              {list.description}
+            </div>
+            <AddItemToList listId={list.id} />
+            <div className="grid grid-cols-1 gap-4 mt-3">
+              {listItemsByCategory &&
+                listItemsByCategory.map((categoryWithItems) => (
+                  <CategoryInList
+                    key={categoryWithItems.id}
+                    categoryWithItems={categoryWithItems}
+                    handleDecrement={handleDecrement}
+                    handleIncrease={handleIncrease}
+                  />
+                ))}
+            </div>
+          </>
+        )}
+      </DndProvider>
     </>
   );
 };

@@ -1,15 +1,42 @@
+import { useDrag } from "react-dnd";
+import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { Item } from "../../../models/Item";
+import { updateItem } from "../../../store/item";
 
 interface ItemRowProps {
   item: Item;
   handleDecrement: Function;
   handleIncrease: Function;
 }
+interface DropResult {
+  id: number;
+}
 
 const ItemRow = ({ item, handleDecrement, handleIncrease }: ItemRowProps) => {
+  const dispatch = useDispatch();
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: "box",
+    item,
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult<DropResult>();
+      console.log(dropResult, item);
+      if (item && dropResult) {
+        const itemWithNewCategory: Item = {
+          ...item,
+          categoryId: dropResult.id ? Number(dropResult.id) : null,
+        };
+        dispatch(updateItem(item.id, itemWithNewCategory));
+      }
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+      handlerId: monitor.getHandlerId(),
+    }),
+  }));
+
   return (
-    <div key={item.id} className="">
+    <div ref={drag} key={item.id} className="cursor-move">
       <div className="p-6 shadow appearance-none bg-transparent border-indigo-500 border rounded w-full text-gray-100 leading-tight focus:outline-none focus:shadow-outline">
         <div className="flex justify-between items-center">
           <div className="flex-grow">
