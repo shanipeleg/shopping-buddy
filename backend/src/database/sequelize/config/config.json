@@ -1,10 +1,11 @@
 {
   "development": {
     "username": "root",
-    "password": null,
+    "password": "one",
     "database": "shopping_buddy",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "host": "db",
+    "dialect": "mysql",
+    "seederStorage": "sequelize"
   },
   "test": {
     "username": "root",

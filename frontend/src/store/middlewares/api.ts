@@ -19,7 +19,7 @@ export const api: Middleware<{}, RootState> =
     }
     try {
       const response = await axios.request({
-        baseURL: "http://localhost:8000/", //TODO env
+        baseURL: process.env.BASE_API,
         url,
         data,
         method,

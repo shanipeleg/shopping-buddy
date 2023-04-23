@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  frontend:
+    # depends_on:
+    #   - backend
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+
+  backend:
+    depends_on:
+      - db
+    build: ./backend
+    command: sh -c 'until nc -z db 3306; do sleep 1; done; npm run migrate; npm run seed:run; npm start;'
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/app
+
+  db:
+    image: mariadb:10.7
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: one
+      MYSQL_DATABASE: shopping_buddy
+      MYSQL_USER: shani
+      MYSQL_PASSWORD: 12345
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+  frontend:
+  backend:

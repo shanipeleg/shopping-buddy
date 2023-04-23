@@ -9,7 +9,7 @@ module.exports = {
           "categories",
           "icon",
           {
-            type: Sequelize.DataTypes.STRING(20),
+            type: Sequelize.DataTypes.STRING(50),
             after: "description",
           },
           { transaction: t }

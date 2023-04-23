@@ -31,7 +31,7 @@ export class List extends Model<
           allowNull: false,
         },
       },
-      { sequelize: connection }
+      { sequelize: connection, tableName: "lists" }
     );
   }
 }

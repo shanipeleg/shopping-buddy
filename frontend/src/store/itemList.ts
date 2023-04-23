@@ -113,7 +113,7 @@ const url = "items/list";
 export const addItemToList = (itemTitle: string, listId: number) =>
   apiCallBegan({
     url: `${url}/${listId}`,
-    data: { title: itemTitle, description: "" }, //TODO deal with description
+    data: { title: itemTitle, description: "" },
     method: HTTP_METHODS.POST,
     onSuccess: itemAddedToList.type,
     onBegin: itemAddToListRequested.type,

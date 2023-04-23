@@ -37,7 +37,7 @@ export class Item extends Model<
           },
         },
       },
-      { sequelize: connection }
+      { sequelize: connection, tableName: "items" }
     );
   }
 }

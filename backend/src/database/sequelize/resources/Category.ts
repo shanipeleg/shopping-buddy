@@ -33,7 +33,7 @@ export class Category extends Model<
           allowNull: false,
         },
       },
-      { sequelize: connection }
+      { sequelize: connection, tableName: "categories" }
     );
   }
 }
