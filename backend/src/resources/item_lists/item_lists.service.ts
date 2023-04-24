@@ -6,7 +6,7 @@ import {
   updateQuantity,
 } from "../../database/sequelize/resources/ItemList";
 import { reloadList } from "../../database/sequelize/resources/List";
-import EntityNotFound from "../../exceptions/EntityNotFound";
+import EntityNotFound, { entities } from "../../exceptions/EntityNotFound";
 
 import { getOne as getOneList, addToList } from "../lists/list.service";
 import addItemToListDTO from "./dtos/add-item-to-list.dto";
@@ -28,7 +28,7 @@ async function updateItemListQuantity(
 ) {
   const ItemList = await getOneItemList(ItemListID);
   if (!ItemList) {
-    throw new EntityNotFound("List Item", ItemListID);
+    throw new EntityNotFound(entities.LIST_ITEM, ItemListID);
   }
   const { quantity } = formBody;
   if (quantity === 0) {

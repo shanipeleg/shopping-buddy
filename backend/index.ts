@@ -6,13 +6,19 @@ import dotenv from "dotenv";
 import { testDatabaseConnection } from "./src/database/sequelize/connection";
 dotenv.config();
 
-const app = express();
-const port = process.env["PORT"];
-app.use(express.json());
-app.use(cors());
-app.use(mainRouter);
+export function createServer() {
+  const app = express();
+  app.use(express.json());
+  app.use(cors());
+  app.use(mainRouter);
+  return app;
+}
 
-app.listen(port, async () => {
-  console.log("Backend working");
-  testDatabaseConnection();
-});
+if (require.main === module) {
+  const app = createServer();
+  const port = process.env["PORT"];
+  app.listen(port, () => {
+    console.log(`Backend started on port ${port}`);
+    testDatabaseConnection();
+  });
+}

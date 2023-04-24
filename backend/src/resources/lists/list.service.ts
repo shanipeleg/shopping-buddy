@@ -2,13 +2,13 @@ import { Item } from "../../database/sequelize/resources/Item";
 import {
   addItemToList,
   createList,
-  getCategories,
+  getLists,
   getOneList,
   List,
   removeList,
   updateList,
 } from "../../database/sequelize/resources/List";
-import EntityNotFound from "../../exceptions/EntityNotFound";
+import EntityNotFound, { entities } from "../../exceptions/EntityNotFound";
 
 import CreateListDTO from "./dtos/create-list.dto";
 import UpdateListDTO from "./dtos/update-list.dto";
@@ -22,13 +22,13 @@ async function addToList(list: List, item: Item) {
 }
 
 async function getAll(): Promise<List[]> {
-  return await getCategories();
+  return await getLists();
 }
 
 async function getOne(id: number) {
   const list = await getOneList(id);
   if (!list) {
-    throw new EntityNotFound("List", id);
+    throw new EntityNotFound(entities.LISTS, id);
   }
   return list;
 }

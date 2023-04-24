@@ -40,7 +40,7 @@ export async function createList(formBody: CreateListDTO): Promise<List> {
   return await List.create(formBody);
 }
 
-export async function getCategories(): Promise<List[]> {
+export async function getLists(): Promise<List[]> {
   return await List.findAll({});
 }
 

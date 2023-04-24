@@ -19,7 +19,7 @@ export const api: Middleware<{}, RootState> =
     }
     try {
       const response = await axios.request({
-        baseURL: process.env.BASE_API,
+        baseURL: process.env.REACT_APP_BASE_API,
         url,
         data,
         method,

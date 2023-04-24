@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { FindByID } from "../../utils/types";
 import { create, getAll, getOne, remove, update } from "./category.service";
 import CreateCategoryDTO from "./dtos/create-category.dto";
@@ -6,11 +6,18 @@ import UpdateCategoryDTO from "./dtos/update-category.dto";
 
 const router = Router();
 
-router.get("/:id", async (req: Request<FindByID>, res: Response) => {
-  const { id } = req.params;
-  const categories = await getOne(id);
-  res.json(categories);
-});
+router.get(
+  "/:id",
+  async (req: Request<FindByID>, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const categories = await getOne(id);
+      res.json(categories);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.get("/", async (_, res: Response) => {
   const categories = await getAll();
